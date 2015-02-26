@@ -1,8 +1,8 @@
 CC=gcc
-
+CFLAGS=-march=native -g -Wall -O2
 all: demo
 
 demo: src/demo.c robot.o
-	$(CC) -g -Wall src/demo.c robot.o -O3 -o demo -lm
+	$(CC) $(CFLAGS) src/demo.c robot.o -o demo -lm
 robot.o: src/robot.c 
-	$(CC) -g -Wall -c src/robot.c -O3 -o robot.o
+	$(CC) $(CFLAGS) -c src/robot.c -o robot.o
