@@ -31,7 +31,7 @@ mat3_t calc_end(int size, double *joints, double *angles);
 //prev is a matrix
 //tool is matrix (of the end effector)
 //goal is a vector of the goal
-double step(double angle, mat3_t prev, mat3_t tool, vec2_t goal);
+void step(double *angle, mat3_t prev, mat3_t tool, vec2_t goal);
 
 //the identity matrix
 mat3_t mat3_identity();
