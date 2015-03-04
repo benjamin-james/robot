@@ -4,20 +4,21 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-//angle is a double,
-//prev is a matrix
+//The meat of this file
+//it calculates the angle to meet the position of the goal
+//angle is a the angle of the current joint
+//prev is a matrix describing the previous joint
 //tool is matrix (of the end effector)
 //goal is a vector of the goal
-double step(double angle, mat3_t prev, mat3_t tool, vec2_t goal)
+void step(double *angle, mat3_t prev, mat3_t tool, vec2_t goal)
 {
 	vec2_t prevP = mat3_getPosition(prev);
 	vec2_t toolP = mat3_getPosition(tool);
 	vec2_t a = {toolP.x - prevP.x, toolP.y - prevP.y};
 	vec2_t b = {goal.x - prevP.x, goal.y - prevP.y};
-	angle += atan2(b.y,b.x) - atan2(a.y,a.x);
-	while(angle > TAU) angle -= TAU;
-	while(angle < 0) angle += TAU;
-	return angle;
+	*angle += atan2(b.y,b.x) - atan2(a.y,a.x);
+	while(*angle > TAU) *angle -= TAU;
+	while(*angle < 0) *angle += TAU;
 }
 //iterates "iterations" times, returns error
 double calculate_position_times(int size, double *joints, double *angles, int iterations, double goal_x, double goal_y)
@@ -53,6 +54,7 @@ int calculate_position(int size, double *joints, double *angles, double error, d
 	return i;//number of iterations
 }
 //adjusts one angle at a time to get closer and closer to the target
+//using the step function, calculates each position of each joint to change it
 mat3_t adjust(int size, double *joints, double *angles, mat3_t tool, vec2_t goal)
 {
 	mat3_t prev = mat3_identity();
@@ -60,7 +62,7 @@ mat3_t adjust(int size, double *joints, double *angles, mat3_t tool, vec2_t goal
 	for(i = 0; i < size; i++)
 	{
 		mat3_t next = mat3_multiply(prev,calc_joint(joints[i],angles[i]));
-		angles[i] = step(angles[i],prev,tool,goal);
+		step(angles+i,prev,tool,goal);
 		prev = mat3_multiply(prev,calc_joint(joints[i],angles[i]));
 		tool = mat3_multiply(mat3_multiply(prev,mat3_inverse(next)),tool);
 	}
