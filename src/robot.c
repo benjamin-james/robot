@@ -3,7 +3,27 @@
 #include "math.h"
 #include "stdlib.h"
 #include "stdio.h"
+#include "string.h" //memcpy
 
+//does almost the same thing as calculate_position_times 
+//but calls move at the end for easy application
+//returns the error from the intended target, or -1 on failure
+//move has two parameters:	(int) 		the index of the angle to be changed
+//				(double)	the change in angle measure in radians
+double moveTowards(int size, double *joints, double *angles, int times, double goal_x, double goal_y, void (*move)(int,double))
+{
+	if(!joints || !angles || size < 1 || !move) return -1;
+	double *prev = malloc(sizeof(double)*size);
+	memcpy(prev,angles,size);
+	double result = calculate_position_times(size,joints,angles,times,goal_x,goal_y);
+	int i;
+	for(i = 0; result >= 0.0 && i < size; i++)
+	{
+		move(i,angles[i]-prev[i]);
+	}
+	free(prev);
+	return result;
+}
 //The meat of this file
 //it calculates the angle to meet the position of the goal
 //angle is a the angle of the current joint
