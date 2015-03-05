@@ -10,12 +10,12 @@ void pinMode(uint8_t pin, uint8_t mode)
 void digitalWrite(uint8_t pin, uint8_t mode)
 {
 	if(mode) PORTB |= 1 << pin;
-	else PORTB &= 1 << pin;
+	else PORTB &= ~(1 << pin);
 }
 ISR(TIMER0_0VF_vect)
 {
-//TCNT0 = 0xF0;
-ms++;
+	//TCNT0 = 0xF0;
+	ms++;
 }
 uint64_t millis()
 {
