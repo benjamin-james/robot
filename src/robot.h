@@ -1,10 +1,11 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+#include "math.h" //M_PI
 #define TAU 2*M_PI
 
 #ifdef __cplusplus 
-extern "C" {		//if you accidentally use a c++ compiler
+extern "C" {		//if you accidentally use a c++ compiler, the function names won't be mangled
 #endif
 typedef struct
 {
@@ -16,6 +17,11 @@ typedef struct
 } vec2_t, *vec2;
 
 
+//does almost the same thing as calculate_position_times 
+//but calls move at the end for easy application
+//move has two parameters:	(int) 		the index of the angle to be changed
+//				(double)	the change in angle measure in radians
+double moveTowards(int size, double *joints, double *angles, int times, double goal_x, double goal_y, void (*move)(int,double));
 //iterates adjustion until error is sufficiently small
 int calculate_position(int size, double *joints, double *angles, double error, double goal_x, double goal_y);
 //iterates "iterations" times, returns the error
