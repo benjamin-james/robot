@@ -21,6 +21,8 @@ void move(int index, double angle)
 }
 uint8_t isCommanded(uint8_t *x, uint8_t *y)
 {
+	//*x = ???;
+	//*y = ???;
 	return (PINB & (1<<PINB6));
 }
 int main()
