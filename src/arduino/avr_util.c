@@ -1,5 +1,6 @@
 #include "avr_util.h"
 #include "avr/io.h"
+#include "stdint.h"
 volatile uint64_t ms = 0;
 void pinMode(uint8_t pin, uint8_t mode)
 {
