@@ -1,24 +1,38 @@
 #include "robot.h"
 #include "stdio.h"
-#define NUM_ARMS 3
+#include "stdlib.h"
+#include "time.h"
+
+#define TIMES 500
+
+inline double toDegrees(double angle)
+{
+	return angle * 360.0 / TAU;
+}
+void moveArm(int arm, double angle)
+{
+  printf("Moved arm %d by %f degrees\n", arm, toDegrees(angle));
+}
 int main(int argc, char **argv)
 {
-	double arms[NUM_ARMS] = {3,7,4};
-	double angles[NUM_ARMS] = {1,0.3,1};
-	double precision = 0.000001;
-	double error = 0;
-	int i;
-	do
-	{
-		printf("error:\t%f\n\narm\t\tangle\n",error);
-		for(i = 0; i < NUM_ARMS; i++)
-		{
-			printf("%f\t%f\n",arms[i],angles[i]);
-		}
-		
-	}while((error = calculate_position_times(NUM_ARMS,arms,angles,1,8,8)) > precision);	//loop 1 time to position (8,8), but do that until precision is reached
-	printf("error:\t%f\n\n",error);
-	mat3_t end = calc_end(NUM_ARMS,arms,angles);
-	mat3_print(&end);
-	return 0;
+  int i, count;
+  if(argc % 2 - 1 || argc < 3) return -1;
+  int size = (argc - 3) / 2;
+  double *arms = malloc(sizeof(double) * size);
+  double *angles = malloc(sizeof(double) * size);
+  for (i = 1, count = 0; count < size; count++) {
+    arms[count] = atof(argv[i++]);
+    angles[count] = atof(argv[i++]);
+  }
+  double gx = atof(argv[i++]);
+  double gy = atof(argv[i++]);
+  clock_t clk = clock();
+  double error = moveTowards(size,arms,angles,TIMES,gx,gy,moveArm);
+  clk = clock() - clk;
+  printf("\nerror: %f\ntime used: %f seconds\n", error, (double)(clk) / CLOCKS_PER_SEC);
+  mat3_t m = calc_end(size,arms,angles);
+  mat3_print(&m);
+  free(arms);
+  free(angles);
+  return 0;
 }
