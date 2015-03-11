@@ -7,7 +7,7 @@
 
 inline double toDegrees(double angle)
 {
-	return angle * 360.0 / TAU;
+	return angle * 57.2957795131; /* == angle * 360 / tau */
 }
 void moveArm(int arm, double angle)
 {
