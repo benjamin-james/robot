@@ -32,9 +32,9 @@ inline int rad_to_deg(double rad)
 	return (int)(rad * 360.0 / TAU);
 }
 /* every time a command is issued, this is called for every servo */
-void moveArm(int arm, double angle)
+void moveArm(int arm, double delta_angle)
 {
-	servos[i].write(rad_to_deg(arm_angles[i]));
+	servos[arm].write(rad_to_deg(arm_angles[arm]));
 }
 /* mandatory function */
 void setup(void)
