@@ -31,10 +31,21 @@ inline int rad_to_deg(double rad)
 {
 	return (int)(rad * 360.0 / TAU);
 }
+/* A function which maps the angle in radians to the correct PWM rate. */
+void servo_set_angle(int index)
+{
+	int us = 0;
+	int old_angle = servos[index].read();	
+	int new_angle = rad_to_deg(arm_angles[index]);
+
+	/* Some amazing magic going on! */
+
+	servos[index].writeMicroseconds(us);	
+}
 /* every time a command is issued, this is called for every servo */
 void moveArm(int arm, double delta_angle)
 {
-	servos[arm].write(rad_to_deg(arm_angles[arm]));
+	servo_set_angle(arm);
 }
 /* mandatory function */
 void setup(void)
@@ -44,7 +55,7 @@ void setup(void)
 	memset(buffer, '\0', BUF_SIZE);
 	for (i = 0; i < NUM_ARMS; i++) {
 		servos[i].attach(arm_pins[i], servo_min[i], servo_max[i]);
-		servos[i].write(rad_to_deg(arm_angles[i]));
+		servo_set_angle(i);
 	}
 }
 /* mandatory function */
