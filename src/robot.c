@@ -21,10 +21,10 @@ double moveTowards(int size, double *joints, double *angles, int times, double g
 	double d = 0;
 	for (i = 0; result >= 0.0 && i < size; i++) {
 		d = angles[i]-prev[i];
-		while (d >= TAU / 2)
-			d -= TAU;
-		while (d < -TAU / 2)
-			d += TAU;
+//		while (d >= TAU / 2)
+//			d -= TAU;
+//		while (d < -TAU / 2)
+//			d += TAU;
 		move(i, d);
 	}
 	free(prev);
@@ -43,10 +43,10 @@ void step(double *angle, mat3_t prev, mat3_t tool, vec2_t goal)
 	vec2_t a = {toolP.x - prevP.x, toolP.y - prevP.y};
 	vec2_t b = {goal.x - prevP.x, goal.y - prevP.y};
 	*angle += atan2(b.y, b.x) - atan2(a.y, a.x);
-	while (*angle >= TAU / 2) 
-		*angle -= TAU;
-	while (*angle < -TAU / 2) 
-		*angle += TAU;
+//	while (*angle >= TAU / 2) 
+//		*angle -= TAU;
+//	while (*angle < -TAU / 2) 
+//		*angle += TAU;
 }
 //iterates "iterations" times, returns error
 double calculate_position_times(int size, double *joints, double *angles, int iterations, double goal_x, double goal_y)
@@ -57,9 +57,12 @@ double calculate_position_times(int size, double *joints, double *angles, int it
 	vec2_t goal = {goal_x, goal_y};
 	int i;
 	double err = 0;
-	for (i = 0; i < iterations; i++) {
+	for (i = 0; i < size; i++)
+		err += joints[i];
+	if (err * err > goal_x * goal_x + goal_y * goal_y)
+		return -1.0;
+	for (i = 0, err = 0; i < iterations; i++)
 		tool = adjust(size, joints, angles, tool, goal);//the computation
-	}
 	vec2_t toolP = mat3_getPosition(tool);		//extract a coordinate from matrix
 	err = (toolP.x - goal_x)*(toolP.x - goal_x) + (toolP.y - goal_y)*(toolP.y - goal_y); //calculate distance left to travel robot arm
 	return sqrt(err);//error
@@ -73,7 +76,12 @@ int calculate_position(int size, double *joints, double *angles, double error, d
 	mat3_t tool = calc_end(size, joints, angles);
 	vec2_t goal = {goal_x, goal_y};
 	int i;
-	double err = error+1;
+	double err = 0.0;
+	for (i = 0; i < size; i++)
+		err += joints[i];
+	if (err * err > goal_x * goal_x + goal_y * goal_y)
+		return -1;
+	err = error+1;
 	for (i = 0; err >= error; i++) {
 		tool = adjust(size, joints, angles, tool, goal);//the computation
 		vec2_t toolP = mat3_getPosition(tool);		//extract a coordinate from matrix

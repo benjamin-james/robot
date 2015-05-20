@@ -16,10 +16,7 @@ void moveArm(int arm, double angle)
 int main(int argc, char **argv)
 {
   int i, count;
-  if(argc % 2 - 1 || argc < 3) {
-	  printf("Usage: %s r1 a1 r2 a2 ... rN aN destinationX destinationY\n\twhere rN is the length of arm N and aN is the angle between arm N and arm N-1\n", *argv);
-	  return -1;
-  }
+  if(argc % 2 - 1 || argc < 3) return -1;
   int size = (argc - 3) / 2;
   double *arms = malloc(sizeof(double) * size);
   double *angles = malloc(sizeof(double) * size);
