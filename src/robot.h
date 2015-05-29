@@ -1,11 +1,16 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include "math.h" //M_PI
+#include "math.h"
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #define TAU 2*M_PI
 
 #ifdef __cplusplus
-extern "C" {		//if you accidentally use a c++ compiler, the function names won't be mangled
+extern "C" {
 #endif
 typedef struct
 {
