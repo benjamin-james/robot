@@ -1,0 +1,9 @@
+lib_LTLIBRARIES = librobot.la
+include_HEADERS = robot.h
+librobot_la_SOURCES = robot.c
+librobot_la_CFLAGS = -pedantic -Wall -ansi -O3
+librobot_la_LDFLAGS = -version-info 1:1:0
+bin_PROGRAMS = pc_demo
+pc_demo_SOURCES = pc_demo.c
+pc_demo_CFLAGS = -g -pedantic -ansi -Wall -O2
+pc_demo_LDADD = librobot.la
