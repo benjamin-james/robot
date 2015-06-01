@@ -12,8 +12,9 @@
 # Use
   To use the library, simply type
   <br><code>#include "robot.h"</code><br>
-  into the file using the functions, and link with <code>robot.o</code> (the compiled library).
+  into the file using the functions, and link with the dynamic library, see the output of <code>make install</code>.
 # Compiling
-  Simply type <code>make</code> to build the library (and the demo!) on most platforms.
-  If the gcc version is before version 4.2, the architecture optimization may not work.
+  Follows autotools standard, first type <code>sh autogen.sh</code> to generate <code>./configure<code>
+# Dependencies
+  Needs autotools installed
 # Have fun!
