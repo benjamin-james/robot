@@ -78,7 +78,7 @@ void serialEvent(void)
 	char c;
 	while (Serial.available() && buf_len < BUF_SIZE) {
 		c = (char)Serial.read();
-		if (c == '\n') {
+		if (c == 'q') {
 			sent_string = 1;
 			return;
 		}
